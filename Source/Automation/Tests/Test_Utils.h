@@ -35,6 +35,8 @@ public:
 		UBlueprint *blueprint;
 		T *actor;
 
+		check(world != 0);
+		
 		blueprint = LoadObject<UBlueprint>(0, *bp_name);
 		actor = world->SpawnActor<T>(blueprint->GeneratedClass, spawn_transform);
 

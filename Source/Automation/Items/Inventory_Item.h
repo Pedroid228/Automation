@@ -9,7 +9,7 @@
 #include "../Data_Types.h"
 #include "Inventory_Item.generated.h"
 
-UCLASS(Abstract) class AUTOMATION_API AInventory_Item : public AActor
+UCLASS() class AUTOMATION_API AInventory_Item : public AActor
 {
 	GENERATED_BODY()
 
@@ -22,6 +22,4 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) USphereComponent *Collision_Component;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) UStaticMeshComponent *Mesh;
-
-private:
 };

@@ -17,6 +17,8 @@ UCLASS() class AUTOMATION_API AAutomation_HUD : public AHUD
 public:
 	AAutomation_HUD();
 
+	UPause_Menu_Widget *Get_Pause_Menu_Widget();
+	
 protected:
 	virtual void BeginPlay() override;
 

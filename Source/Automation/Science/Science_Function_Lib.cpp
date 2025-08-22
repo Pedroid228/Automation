@@ -22,3 +22,19 @@ int UScience_Function_Lib::Fibonacci( int index )
 	}
 }
 //------------------------------------------------------------------------------------------------------------
+int UScience_Function_Lib::Factorial(int index)
+{
+	int i;
+	int result = 1;
+	
+	for (i = 0; i <= index; i++)
+	{
+		if (i == 0 || i == 1)
+			continue;
+		
+		result *= i;
+	}
+
+	return result;
+}
+//------------------------------------------------------------------------------------------------------------

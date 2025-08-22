@@ -14,7 +14,6 @@ extern DEFINE_LOG_CATEGORY(Test_Log);
 
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FInventory_Item_Pick_Up_On_Jump, "Test_Auto.Character.Inventory_Item_Pick_Up_On_Jump", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter )
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FInventory_Item_Not_Pick_Up_On_Jump_Too_High, "Test_Auto.Character.Inventory_Item_Not_Pick_Up_On_Jump_Too_High", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter)
-IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCharacter_Should_Pick_Up_All_Items, "Test_Auto.Character.Character_Should_Pick_Up_All_Items", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter)
 IMPLEMENT_SIMPLE_AUTOMATION_TEST(FCharacter_Should_Pick_Up_All_Items_Recording, "Test_Auto.Character.Character_Should_Pick_Up_All_Items_Recording", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter)
 IMPLEMENT_COMPLEX_AUTOMATION_TEST(FMaps_Should_Be_Open, "Test_Auto.Maps_Should_Be_Open", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter)
 IMPLEMENT_COMPLEX_AUTOMATION_TEST(FCharacter_Should_Pick_Up_All_Items_Recording_Many_Maps, "Test_Auto.Character.Character_Should_Pick_Up_All_Items_Recording_Many_Maps", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter)
@@ -185,95 +184,7 @@ bool FInventory_Item_Not_Pick_Up_On_Jump_Too_High::RunTest(const FString &parame
 
 
 
-// FCharacter_Should_Pick_Up_All_Items
-//------------------------------------------------------------------------------------------------------------
-bool FCharacter_Should_Pick_Up_All_Items::RunTest(const FString &parameters)
-{
-	const FString move_action_name = TEXT("IA_Move");
-	const FString jump_action_name = TEXT("IA_Jump");
-	UWorld *world = 0;
-	const UInputAction *jump_action = 0;
-	const UInputAction *move_action = 0;
-	TArray<AActor *> inventory_items;
-
-	ALevel_Scope level_scope(TEXT("/Game/Maps/L_Items_Road") );
-
-	world = AsTest_Utils::Get_Game_World();
-	if (! TestNotNull(TEXT("World exists"), world) ) return false;
-
-	UGameplayStatics::GetAllActorsOfClass(world, AInventory_Item::StaticClass(), inventory_items);
-	for (AActor *inventory_item : inventory_items)
-		TestTrueExpr(IsValid(inventory_item) );
-
-	move_action = Get_Input_Action_By_Name(move_action_name);
-	if (!TestNotNull(TEXT("Move action exists"), move_action) ) return false;
-
-	jump_action = Get_Input_Action_By_Name(jump_action_name);
-	if (!TestNotNull(TEXT("Jump action exists"), jump_action) ) return false;
-	
-	//FInputActionValue move_action_value(FVector2D(1.0, 0.0) );
-	//Apply_Input(move_action, move_action_value, 0.0f);
-
-	//ADD_LATENT_AUTOMATION_COMMAND(FWaitLatentCommand(10.0f) );
-
-	auto move_forward = [move_action, world]() 
-	{
-		if (move_action == 0)
-			UE_LOG(Test_Log, Error, TEXT("Move action was null") );
-
-		FInputActionValue move_action_value(FVector2D(0.0, 1.0) );
-		Apply_Input(move_action, move_action_value, world);
-	};
-	
-	auto move_left = [move_action, world]() 
-	{
-		if (move_action == 0)
-			UE_LOG(Test_Log, Error, TEXT("Move action was null") );
-
-		FInputActionValue move_action_value(FVector2D(-1.0, 0.0) );
-		Apply_Input(move_action, move_action_value, world);
-	};
-
-	auto apply_jump = [jump_action, world]()
-	{
-		FInputActionValue jump_action_value(true);
-		Apply_Input(jump_action, jump_action_value, world);
-	};
-
-	auto stop_moving = [move_action, world]() 
-	{
-		if (move_action == 0)
-			UE_LOG(Test_Log, Error, TEXT("Move action was null") );
-
-		FInputActionValue move_action_value(FVector2D(0.0, 0.0) );
-		Apply_Input(move_action, move_action_value, world);
-	};
-
-	auto check_items_pick_up = [inventory_items]()
-	{
-		for (AActor *invetory_item : inventory_items)
-		{
-			if (IsValid(invetory_item) )
-				UE_LOG(Test_Log, Error , TEXT("Item was not picked up") );
-		}
-	};
-
-	ADD_LATENT_AUTOMATION_COMMAND(FWaitLatentCommand(1.5) );
-	ADD_LATENT_AUTOMATION_COMMAND(FUntil_Command(move_forward, stop_moving, 2.2) );  // Move forward
-	ADD_LATENT_AUTOMATION_COMMAND(FDelayedFunctionLatentCommand(apply_jump, 2.0f) );  // Jump
-	ADD_LATENT_AUTOMATION_COMMAND(FWaitLatentCommand(2.0) );
-	ADD_LATENT_AUTOMATION_COMMAND(FUntil_Command(move_left, stop_moving, 2.0) );  // Move right
-	ADD_LATENT_AUTOMATION_COMMAND(FWaitLatentCommand(2.0) );
-	ADD_LATENT_AUTOMATION_COMMAND(FDelayedFunctionLatentCommand(check_items_pick_up, 2.0f) );  // Check all items picked up
-
-	return true;
-}
-//------------------------------------------------------------------------------------------------------------
-
-
-
-
-// FCharacter_Should_Pick_Up_All_Items_Recording
+// FPlay_Recording_Latent_Command
 //------------------------------------------------------------------------------------------------------------
 class FPlay_Recording_Latent_Command : public IAutomationLatentCommand
 {

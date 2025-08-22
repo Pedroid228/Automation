@@ -11,5 +11,6 @@ UCLASS() class AUTOMATION_API UScience_Function_Lib : public UBlueprintFunctionL
 
 public:
 	UFUNCTION(BlueprintPure) static int Fibonacci(int index);
+	UFUNCTION(BlueprintPure) static int Factorial(int index);
 };
 //------------------------------------------------------------------------------------------------------------

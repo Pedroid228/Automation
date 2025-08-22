@@ -11,6 +11,11 @@ AAutomation_HUD::AAutomation_HUD()
 {
 }
 //------------------------------------------------------------------------------------------------------------
+UPause_Menu_Widget* AAutomation_HUD::Get_Pause_Menu_Widget()
+{
+	return Pause_Menu_Widget;
+}
+//------------------------------------------------------------------------------------------------------------
 void AAutomation_HUD::BeginPlay()
 {
 	UWorld *world = 0;

@@ -2,9 +2,11 @@
 #include "..//Science/Science_Function_Lib.h"
 #include "Test_Payload.h"
 
-IMPLEMENT_SIMPLE_AUTOMATION_TEST( FFibonacci_Simple, "Test_Auto.Science.Fibonacci.Simple", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter )
-IMPLEMENT_SIMPLE_AUTOMATION_TEST( FFibonacci_Stress, "Test_Auto.Science.Fibonacci.Stress", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::LowPriority | EAutomationTestFlags::StressFilter )
-IMPLEMENT_SIMPLE_AUTOMATION_TEST( FFibonacci_Log_Has_Errors, "Test_Auto.Science.Fibonacci.Log_Has_Errors", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter )
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FFibonacci_Simple, "Test_Auto.Science.Fibonacci.Simple", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter )
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FFibonacci_Stress, "Test_Auto.Science.Fibonacci.Stress", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::LowPriority | EAutomationTestFlags::StressFilter )
+IMPLEMENT_SIMPLE_AUTOMATION_TEST(FFibonacci_Log_Has_Errors, "Test_Auto.Science.Fibonacci.Log_Has_Errors", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter )
+DEFINE_SPEC(FFactorial_Spec, "Test_Auto.Science.Factorial_Spec", EAutomationTestFlags_ApplicationContextMask | EAutomationTestFlags::HighPriority | EAutomationTestFlags::ProductFilter )
+
 
 //------------------------------------------------------------------------------------------------------------
 bool FFibonacci_Simple::RunTest( const FString &Parameters )
@@ -53,5 +55,32 @@ bool FFibonacci_Log_Has_Errors::RunTest( const FString &Parameters )
 	UScience_Function_Lib::Fibonacci(-10);
 
 	return true;
+}
+//------------------------------------------------------------------------------------------------------------
+
+
+
+
+//------------------------------------------------------------------------------------------------------------
+void FFactorial_Spec::Define()
+{
+	Describe(TEXT("Corner cases"),  [this]()
+	{
+		It(TEXT("should return 1 when index is 0"), [this](){ TestTrueExpr(UScience_Function_Lib::Factorial(0) == 1); });
+		It(TEXT("should return 1 when index is 1"), [this](){ TestTrueExpr(UScience_Function_Lib::Factorial(1) == 1); });
+	});
+
+	Describe(TEXT("Normal cases"),  [this]()
+	{
+		FString it_expectation;
+		TArray<STest_Payload<int, int>> test_data{{2, 2}, {3, 6}, {4, 24}, {5, 120} };
+		
+		for (STest_Payload<int, int> &data : test_data)
+		{
+			it_expectation = FString::Printf(TEXT("should return %i when index is %i"), data.Expected_Value, data.Test_Value);
+
+			It(it_expectation, [this, data](){ TestTrueExpr(UScience_Function_Lib::Factorial(data.Test_Value) == data.Expected_Value); });
+		}
+	});
 }
 //------------------------------------------------------------------------------------------------------------
