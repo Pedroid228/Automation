@@ -1,0 +1,1 @@
+java -jar agent.jar -url http://localhost:8080/ -secret 01cfccd1f371359a7bb9c124a22ad01befe37b0e1758859f5e4e8c935f0b0670 -name "Pavel_Node_1" -webSocket -workDir "c:\Jenkins"

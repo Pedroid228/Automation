@@ -20,8 +20,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
-	UPROPERTY(EditAnywhere) float Damage_Amount;
-	UPROPERTY(EditAnywhere, Meta=(Units="Seconds") ) float Life_Time;
+	UPROPERTY(EditAnywhere) float Damage_Amount; /*!< Damage from this projectile */
+	UPROPERTY(EditAnywhere, Meta=(Units="Seconds") ) float Life_Time; /*!< Projectile life time */
 	UPROPERTY(EditAnywhere) UProjectileMovementComponent *Movement_Component = 0;
 	UPROPERTY(EditAnywhere) UStaticMeshComponent *Projectile_Mesh = 0;
 	UPROPERTY(EditAnywhere) USphereComponent *Sphere_Component = 0;

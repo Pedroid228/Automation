@@ -2,7 +2,10 @@ import os
 import subprocess
 import config
 
-command = f'{config.Editor_Path} {config.Project_Path} --ExecCmds="Automation RunTest Test_Auto.Science;Quit" -log -abslog={config.Tests_Log_Path} -nosplash -ReportOutputPath={config.Report_Output_Path}'
+test_runner = f'{config.Editor_Path} {config.Project_Path} --ExecCmds="Automation RunTest Test_Auto.Science;Quit" -log -abslog={config.Tests_Log_Path} -nosplash -ReportOutputPath={config.Report_Output_Path}'
+tests_coverage = f'{config.Open_CPP_Coverage_Path} --modules={config.Project_Root_Path} --sources={config.Source_Path} --excluded_sources={config.Source_Path}\\Automation\\Tests --export_type={config.Coverage_Export_Type}:{config.Coverage_Output_Path} --'
+
+command = f'{tests_coverage} {test_runner}'
 
 subprocess.run(command, shell=True)
 

@@ -1,0 +1,1 @@
+pinggy.exe -p 443 -R0:localhost:8080 PkeILyFEznD@a.pinggy.io

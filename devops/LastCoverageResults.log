@@ -1,0 +1,22 @@
+[2025-09-09 16:36:44] [info] Start Program:
+Path:"c:\\Unreal\\UE_5.5\\Engine\\Binaries\\Win64\\UnrealEditor.exe"
+Arguments:f:\Work\Unreal_Engine\Unreal_Projects\Automation\Automation.uproject --ExecCmds=Automation RunTest Test_Auto.Science;Quit -log -abslog=f:\Work\Unreal_Engine\Unreal_Projects\Automation\Build\Tests\Tests.log -nosplash -ReportOutputPath=f:\Work\Unreal_Engine\Unreal_Projects\Automation\Build\Tests 
+Working directory: not set.
+Modules: Selected: f:\Work\Unreal_Engine\Unreal_Projects\Automation Excluded: 
+Sources: Selected: f:\Work\Unreal_Engine\Unreal_Projects\Automation\Source Excluded: f:\Work\Unreal_Engine\Unreal_Projects\Automation\Source\Automation\Tests 
+Log Level: Normal
+Cover Children: 0
+Aggregate by file: 1
+Continue after C++ exception: 0
+Optimized build support: 0
+Export: html f:\Work\Unreal_Engine\Unreal_Projects\Automation\Build\Tests\Coverage\Code_Coverage 
+Input coverage: 
+Unified diff: 
+Excluded line regular expressions: 
+Substitute pdb source paths: 
+[2025-09-09 16:36:50] [info] Module: F:\Work\Unreal_Engine\Unreal_Projects\Automation\Binaries\Win64\UnrealEditor-Automation.dll is selected because it matches selected pattern: f:\Work\Unreal_Engine\Unreal_Projects\Automation
+[2025-09-09 16:36:50] [info] Module: F:\Work\Unreal_Engine\Unreal_Projects\Automation\Binaries\Win64\UnrealEditor-Automation.dll is selected because it matches selected pattern: f:\Work\Unreal_Engine\Unreal_Projects\Automation
+[2025-09-09 16:37:08] [info] ----------------------------------------------------
+[2025-09-09 16:37:08] [info] Coverage generated in Folder f:\Work\Unreal_Engine\Unreal_Projects\Automation\Build\Tests\Coverage\Code_Coverage
+[2025-09-09 16:37:08] [info] ----------------------------------------------------
+[2025-09-09 16:37:08] [info] The code coverage report is not what you expect? See the FAQ https://github.com/OpenCppCoverage/OpenCppCoverage/wiki/FAQ.
