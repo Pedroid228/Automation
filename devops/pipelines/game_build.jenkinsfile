@@ -1,0 +1,43 @@
+pipeline {
+    agent {
+        node {
+            label ""
+            customWorkspace "i:\\Jenkins_Jobs\\Automation_Pipeline"
+        }
+    }
+    
+    environment
+    {
+        UE_PROJECT_NAME = 'Automation'
+        UE_PATH = 'c:\\Unreal\\UE_5.7'
+        UAT_PATH = "${env.UE_PATH}\\Engine\\Build\\BatchFiles\\RunUAT.bat"
+        BUILD_DIR = 'i:\\Jenkins_Jobs\\Automation_Pipeline'
+    }
+
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scmGit(
+                    branches: [[name: 'main']],
+                    extensions: [], 
+                    userRemoteConfigs: [[credentialsId: 'Pedroid228cred', url: 'https://github.com/Pedroid228/Automation']])
+            }
+        }
+        stage('Build Game') {
+            steps {
+                bat '''%UAT_PATH% BuildCookRun ^
+                    -project="%BUILD_DIR%\\%UE_PROJECT_NAME%.uproject" ^
+                    -targetplatform=Win64 ^
+                    -clientconfig=DebugGame -build -cook -stage -pak -package -archive -archivedirectory="Archive"'''
+            }
+        }
+        stage('Archive') {
+            steps {
+                archiveArtifacts artifacts: 'Archive',
+                followSymlinks: false,
+                onlyIfSuccessful: true
+            }
+        }
+        
+    }
+}
