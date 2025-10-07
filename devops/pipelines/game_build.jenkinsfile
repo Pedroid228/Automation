@@ -19,7 +19,7 @@ pipeline {
             steps {
                 checkout scmGit(
                     branches: [[name: 'main']],
-                    extensions: [], 
+                    extensions: [cleanBeforeCheckout(deleteUntrackedNestedRepositories: true)], 
                     userRemoteConfigs: [[credentialsId: 'Pedroid228cred', url: 'https://github.com/Pedroid228/Automation']])
             }
         }
