@@ -116,8 +116,6 @@ void UInput_Recording_Component::EndPlay(const EEndPlayReason::Type end_play_rea
 
 	Json_Utils::Write_Input_Data(file_path, Input_Data);
 
-	Input_Data.Initial_Transform.ToString();
-
 	Super::EndPlay(end_play_reason);
 }
 //------------------------------------------------------------------------------------------------------------
