@@ -28,12 +28,12 @@ pipeline {
                 bat '''%UAT_PATH% BuildCookRun ^
                     -project="%BUILD_DIR%\\%UE_PROJECT_NAME%.uproject" ^
                     -targetplatform=Win64 ^
-                    -clientconfig=DebugGame -build -cook -stage -pak -package -archive -archivedirectory="Archive"'''
+                    -clientconfig=DebugGame -build -cook -stage -pak -package -archive -archivedirectory="Build/Artifacts"'''
             }
         }
         stage('Archive') {
             steps {
-                archiveArtifacts artifacts: 'Archive',
+                archiveArtifacts artifacts: 'Build/Artifacts',
                 followSymlinks: false,
                 onlyIfSuccessful: true
             }
