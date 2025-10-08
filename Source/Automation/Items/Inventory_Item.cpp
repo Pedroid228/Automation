@@ -3,7 +3,7 @@
 // AInventory_Item
 //------------------------------------------------------------------------------------------------------------
 AInventory_Item::AInventory_Item()
-: Collision_Component(0), Mesh(0), Score(0), Item_Type(EInventory_Item_Types::Cube)
+: Score(0), Item_Type(EInventory_Item_Types::Cube)
 {
 	// Collision_Component ROOT
 	Collision_Component = CreateDefaultSubobject<USphereComponent>(TEXT("Collision_Comp") );

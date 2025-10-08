@@ -22,7 +22,7 @@ bool FMath_Abs::RunTest( const FString &Parameters )
 
 	for (STest_Payload<double, double> &test : test_data_double)
 	{
-		const FString Info_String = FString::Printf(TEXT("Test value: %d, Expected value: %d"), test.Test_Value, test.Expected_Value );
+		const FString Info_String = FString::Printf(TEXT("Test value: %f, Expected value: %f"), test.Test_Value, test.Expected_Value );
 		TestEqual( Info_String, FMath::Abs(test.Test_Value), test.Expected_Value, test.Tolerance);
 	}
 

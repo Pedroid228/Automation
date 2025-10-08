@@ -20,6 +20,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite) EInventory_Item_Types Item_Type;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) USphereComponent *Collision_Component;
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) UStaticMeshComponent *Mesh;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) USphereComponent *Collision_Component = 0;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) UStaticMeshComponent *Mesh = 0;
 };
