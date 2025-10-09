@@ -1,3 +1,32 @@
+def Get_Build_Start_Color() {
+    if (env.BUILD_NUMBER > "1") {
+        return currentBuild.getPreviousBuild().result
+    }
+
+    return "SUCCESS"   
+}
+
+def Send_Discord_Message(message, build_result) {
+    discordSend description: message,
+                footer: "Jenkins)",
+                link: env.BUILD_URL,
+                result: build_result,
+                title: env.JOB_NAME,
+                webhookURL: "https://discord.com/api/webhooks/1425166627145781268/mXLrcODpcHm-21FyoaAAAcP6aLIag5artXa1TP0L6AY9TntHPxfOaAsA9OrQ62h-Us4G"
+}
+
+def Post_Discord_Message() {
+    if (currentBuild.result == "SUCCESS") {
+        Send_Discord_Message(env.SUCCESS_MESSAGE, currentBuild.result)
+    }
+    else if (currentBuild.result == "FAILURE") {
+        Send_Discord_Message(env.FAIL_MESSAGE , currentBuild.result)
+    }
+    else {
+        Send_Discord_Message(env.ABORT_MESSAGE, currentBuild.result)
+    }
+}
+
 pipeline {
     agent {
         node {
@@ -6,38 +35,56 @@ pipeline {
         }
     }
     
-    environment
-    {
-        UE_PROJECT_NAME = 'Automation'
-        UE_PATH = 'c:\\Unreal\\UE_5.7'
-        UAT_PATH = "${env.UE_PATH}\\Engine\\Build\\BatchFiles\\RunUAT.bat"
-        BUILD_DIR = 'i:\\Jenkins_Jobs\\Automation_Pipeline'
+    parameters {
+        string defaultValue: 'Automation', name: 'UE_PROJECT_NAME'
+        string defaultValue: 'c:\\Unreal\\UE_5.5\\Engine\\Build\\BatchFiles\\RunUAT.bat', name: 'UAT_PATH'
+        string defaultValue: 'i:\\Jenkins_Jobs\\Automation_Pipeline', name: 'BUILD_DIR'
+        string defaultValue: 'https://github.com/Pedroid228/Automation', name: 'GITHUB_REPO_URL'
+        choice choices: ['Win64', 'Android'], name: 'Platform'
     }
+
+    /*environment
+    {
+        ZIP_DIR = Build\\**\\*.*
+        START_MESSAGE = Build Started
+        SUCCESS_MESSAGE = Build Succeded
+        FAIL_MESSAGE = Build Failed. Something was wrong(
+        ABORT_MESSAGE = Build Aborted
+        BUILD_FLAGS = -build -cook -stage -pak -package -archive
+    }*/
 
     stages {
         stage('Checkout') {
             steps {
+                Send_Discord_Message(env.START_MESSAGE, Get_Build_Start_Color())
+
                 checkout scmGit(
                     branches: [[name: 'main']],
                     extensions: [cleanBeforeCheckout(deleteUntrackedNestedRepositories: true)], 
-                    userRemoteConfigs: [[credentialsId: 'Pedroid228cred', url: 'https://github.com/Pedroid228/Automation']])
+                    userRemoteConfigs: [[credentialsId: 'Pedroid228cred', url: params.GITHUB_REPO_URL]])
             }
         }
         stage('Build Game') {
             steps {
                 bat '''%UAT_PATH% BuildCookRun ^
                     -project="%BUILD_DIR%\\%UE_PROJECT_NAME%.uproject" ^
-                    -targetplatform=Win64 ^
-                    -clientconfig=DebugGame -build -cook -stage -pak -package -archive -archivedirectory="Build/Artifacts"'''
+                    -targetplatform=%Platform% ^
+                    -clientconfig=DebugGame %BUILD_FLAGS% -archivedirectory="%BUILD_DIR%/Build/%BUILD_NUMBER%"'''
             }
         }
         stage('Archive') {
             steps {
-                archiveArtifacts artifacts: 'Build/Artifacts',
+                archiveArtifacts artifacts: "$ZIP_DIR",
                 followSymlinks: false,
                 onlyIfSuccessful: true
             }
         }
         
+    }
+
+    post {
+        always {
+            Post_Discord_Message()
+        }
     }
 }
